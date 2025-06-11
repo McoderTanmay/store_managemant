@@ -1,6 +1,6 @@
 const secret = process.env.JWT_SECRET;
 
-export const auth = (req, res, next) => {
+export const authenticate = (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if(!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -18,7 +18,7 @@ export const auth = (req, res, next) => {
     }
 }
 
-export const authRole = (...role) => {
+export const authorize = (...role) => {
     return (req, res, next) => {
         const userRole = req.user.role;
         if (!userRole || !role.includes(userRole)) {

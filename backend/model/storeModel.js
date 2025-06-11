@@ -30,7 +30,16 @@ export const Store = db_config.define("store", {
     type: DataTypes.INTEGER,
     allowNull: false,
     unique: true,
-  }
+  },
+  rating: {
+    type: DataTypes.FLOAT,
+    allowNull: true,
+    defaultValue: 0.0,
+    validate: {
+      min: 0.0,
+      max: 5.0,
+    },
+  },
 },{
     tableName:"stores",
   });
