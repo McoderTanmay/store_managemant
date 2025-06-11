@@ -1,8 +1,11 @@
 import express from 'express';
 import cors from "cors";
 import dotenv from "dotenv";
+import './model/association.js';
 
 dotenv.config();
+import { db_config } from './model/config.js';
+
 const app = express();
 
 app.use(express.json());
@@ -13,6 +16,12 @@ app.use(cors({
   credentials: true
 }));
 
-server.listen(5000, () => {
-  console.log("🚀 Server is running on port 5000");
+db_config.sync({}).then(() => {
+  console.log("Database connected successfully");
+}).catch((err) => {
+  console.error("Error connecting to the database:", err);
+});
+
+app.listen(5000, () => {
+  console.log("Server is running on port 5000");
 });

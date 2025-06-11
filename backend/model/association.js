@@ -31,3 +31,5 @@ Ratings.belongsTo(Store, {
   foreignKey: "storeId",
   as: "store",
 });
+
+export { Users, Store, Ratings };

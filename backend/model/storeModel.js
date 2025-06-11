@@ -1,4 +1,4 @@
-import { db_config } from "./config";
+import { db_config } from "./config.js";
 import { DataTypes } from "sequelize";
 
 export const Store = db_config.define("store", {
