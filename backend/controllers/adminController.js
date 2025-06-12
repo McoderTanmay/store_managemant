@@ -1,10 +1,8 @@
-import { User } from '../models/userModel.js';
-import { Store } from '../models/storeModel.js';
-import { Rating } from '../models/ratingModel.js';
+import { Users, Store, Ratings } from '../model/association.js';
 
 export const getAllUsers = async (req, res) => {
     try {
-        const users = await User.findAll();
+        const users = await Users.findAll();
         res.status(200).json(users);
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
@@ -40,7 +38,7 @@ export const getStoreRatings = async (req, res) => {
 export const addUser = async (req, res) => {
     const { name, email, password, role } = req.body;
     try {
-        const newUser = await User.create({ name, email, password, role });
+        const newUser = await Users.create({ name, email, password, role });
         res.status(201).json(newUser);
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
@@ -59,9 +57,9 @@ export const addStore = async (req, res) => {
 
 export const getDashboard = async (req, res) => {
     try {
-        const userCount = await User.count();
+        const userCount = await Users.count();
         const storeCount = await Store.count();
-        const ratingCount = await Rating.count();
+        const ratingCount = await Ratings.count();
 
         res.status(200).json({
             userCount,

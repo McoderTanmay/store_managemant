@@ -1,4 +1,5 @@
 const secret = process.env.JWT_SECRET;
+import jwt from 'jsonwebtoken';
 
 export const authenticate = (req, res, next) => {
     const authHeader = req.headers.authorization;
@@ -14,6 +15,8 @@ export const authenticate = (req, res, next) => {
         req.user = decoded;
         next();
     } catch (error) {
+        console.log(error);
+        
         return res.status(403).json({ message: 'Forbidden' });
     }
 }

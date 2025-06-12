@@ -25,28 +25,54 @@ export const login = async (req, res) => {
 };
 
 export const register = async (req, res) => {
-    const { name, email, password, role } = req.body;
+  const { name, email, address, password, role } = req.body;
+  if (password.length < 8 || password.length > 16) {
+    return res.status(400).json({
+      message: "Password must be between 8 and 16 characters.",
+    });
+  }
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+  if (!hasUpperCase || !hasSpecialChar) {
+    return res.status(400).json({
+      message:
+        "Password must include at least one uppercase letter and one special character.",
+    });
+  }
 
-    try {
-        const existingUser = await Users.findOne({ where: { email } });
-        if (existingUser) {
-            return res.status(400).json({ message: "User already exists" });
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = await Users.create({
-            name,
-            email,
-            password: hashedPassword,
-            role
-        });
-
-        const token = jwt.sign({ id: newUser.id, role: newUser.role }, secret, { expiresIn: '1h' });
-        res.status(201).json({ token, userId: newUser.id, role: newUser.role });
-    } catch (error) {
-        res.status(500).json({ message: "Server error" });
+  try {
+    const existingUser = await Users.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
     }
-}
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await Users.create({
+      name,
+      email,
+      password: hashedPassword,
+      role,
+      address
+    });
+
+    const token = jwt.sign(
+      { id: newUser.id, role: newUser.role },
+      secret,
+      { expiresIn: "1h" }
+    );
+
+    res.status(201).json({
+      token,
+      userId: newUser.id,
+      role: newUser.role,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 export const updatePassword = async (req, res) => {
     const { oldPassword, newPassword } = req.body;

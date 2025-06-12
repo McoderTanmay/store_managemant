@@ -21,22 +21,7 @@ export const Users = db_config.define(
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: {
-          args: [8, 16],
-          msg: "Password must be between 8 and 16 characters.",
-        },
-        isValidPassword(value) {
-          const hasUpperCase = /[A-Z]/.test(value);
-          const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
-          if (!hasUpperCase || !hasSpecialChar) {
-            throw new Error(
-              "Password must include at least one uppercase letter and one special character."
-            );
-          }
-        },
-      },
+      allowNull: false
     },
     email: {
       type: DataTypes.STRING,
